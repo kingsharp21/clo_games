@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Sample API</title>
+	<style type="text/css">
+		body {
+			background-color: #FFFFFF;
+		}
+	</style>
+	<script type="text/javascript" src="/js/api.js"></script>
+</head>
+<body>
+	<div style="width: 50%; float: left;">
+		<div class="score">
+			<h3>Score:</h3>
+			<input type="number" value="10" id="score-value" />
+			<button onclick="submit_score()">Submit score</button>
+		</div>
+		<div class="user">
+			<h3>User:</h3>
+			<button onclick="get_user()">Get current user/player.</button>
+		</div>
+		<div class="leaderboard">
+			<h3>Leaderboard:</h3>
+			Current game<br><br>
+			<button onclick="show_leaderboard({type: 'top', amount: 10})">Show top 10 - All time</button>
+			<br><br>
+			<button onclick="show_leaderboard({type: 'top-day', amount: 10})">Show top 10 - Last 24 hours</button>
+			<br><br>
+			<button onclick="show_leaderboard({type: 'top-week', amount: 10})">Show top 10 - Last week</button>
+			<br><br>
+			<button onclick="show_leaderboard({type: 'top-month', amount: 10})">Show top 10 - Last month</button>
+			<br><br>
+			Global (All games)<br><br>
+			<button onclick="show_leaderboard({type: 'top-all', amount: 10})">Show top 10 - All time</button>
+			<br><br>
+			<button onclick="show_leaderboard({type: 'top-all-day', amount: 10})">Show top 10 - Last 24 hours</button>
+			<br><br>
+			<button onclick="show_leaderboard({type: 'top-all-week', amount: 10})">Show top 10 - Last week</button>
+			<br><br>
+			<button onclick="show_leaderboard({type: 'top-all-month', amount: 10})">Show top 10 - Last month</button>
+			<br><br>
+			<textarea id="leaderboard" rows="18" style="width: 300px;"></textarea>
+		</div>
+		<div class="ad-btn">
+			<h3>User:</h3>
+			<button onclick="show_ad()">Show Ad.</button>
+		</div>
+	</div>
+	<div style="width: 50%; float: left;">
+		<div class="log">
+			<h3>Log:</h3>
+			<textarea id="log" rows="18" style="width: 300px;"></textarea>
+		</div>
+	</div>
+
+<script type="text/javascript">
+	function submit_score(){
+		let value = document.getElementById('score-value').value;
+		if (typeof ca_api !== 'undefined'){ // If CloudArcade API is exist
+			ca_api.submit_score(value).then((res)=>{
+				if(res === 'ok'){
+					add_log('Score added');
+				} else {
+					add_log('Score failed to add.');
+				}
+			});
+		}
+			
+	}
+	function get_user(){
+		if (typeof ca_api !== 'undefined'){ // If CloudArcade API is exist
+			ca_api.get_current_user().then((res)=>{
+				add_log(res);
+			});
+		}
+	}
+	function show_leaderboard(conf){
+		if (typeof ca_api !== 'undefined'){ // If CloudArcade API is exist
+			ca_api.get_scoreboard(conf).then((res)=>{
+				add_log(res);
+				//
+				if(res){
+					let str = '';
+					list = JSON.parse(res);
+					list.forEach((item)=>{
+						str += 'User: '+item.username+', score: '+item.score+', game title: '+item.game_title+'\n';
+					});
+					let textarea = document.getElementById('leaderboard');
+					textarea.value = str;
+				} else {
+					add_log('Leaderboard is empty.');
+				}
+			});
+		}
+	}
+	function show_ad(){
+		if (typeof ca_api !== 'undefined'){
+			ca_api.show_ad();
+		}
+	}
+	function add_log(log){
+		let textarea = document.getElementById('log');
+		textarea.value = log+'\n'+textarea.value;
+	}
+</script>
+</body>
+</html>

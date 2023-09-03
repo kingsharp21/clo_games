@@ -1,0 +1,13 @@
+{
+	"name": "Ads Manager",
+	"version": "1.0.0",
+	"author": "CloudArcade",
+	"description": "Manage in Game Ads, including Adsense IMA SDK",
+	"website": "https://cloudarcade.net",
+	"require_version": "1.3.5",
+	"tested_version": "1.3.5",
+	"last_update": "14/01/2022",
+	"type": "plugin",
+	"target": "index",
+	"require_login": false
+}

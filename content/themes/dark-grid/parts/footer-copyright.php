@@ -1,0 +1,1 @@
+<?php echo SITE_TITLE ?> © 2021. All rights reserved. v<?php echo VERSION ?> <?php if(is_login()){ echo '<a href="'.DOMAIN.'admin.php">Admin Dashboard</a>'; } ?>
